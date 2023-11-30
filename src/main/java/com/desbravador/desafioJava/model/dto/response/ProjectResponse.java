@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -38,22 +37,22 @@ public class ProjectResponse {
 
   public static ProjectResponse of(Project project) {
     var response = builder().build();
-    BeanUtils.copyProperties(project, response);
+   // BeanUtils.copyProperties(project, response);
     response.setStatus(Optional.ofNullable(project.getStatus()).map(ProjectStatusEnum::valueOf).orElse(null));
     response.setRisco(Optional.ofNullable(project.getRisco()).map(ProjectRiskEnum::valueOf).orElse(null));
-    response.setGerente(Optional.ofNullable(project.getGerente()).map(PersonResponse::of).orElse(null));
+   // response.setGerente(Optional.ofNullable(project.getGerente()).map(PersonResponse::of).orElse(null));
     response.setFuncionarios(getFuncionarios(project.getMembros()));
 
     return response;
   }
 
   private static List<PersonResponse> getFuncionarios(List<Member> members) {
-    if (Objects.nonNull(members)) {
+   /* if (Objects.nonNull(members)) {
       return members.stream()
               .map(Member::getPerson)
               .map(PersonResponse::of)
               .collect(Collectors.toList());
-    }
+    }*/
     return List.of();
   }
 }

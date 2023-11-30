@@ -2,23 +2,16 @@ package com.desbravador.desafioJava.exceptionhandler;
 
 import com.desbravador.desafioJava.exceptionhandler.exception.NotFoundException;
 import com.desbravador.desafioJava.exceptionhandler.exception.ValidateException;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 
 
 @ControllerAdvice
-public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+public class ApiExceptionHandler { //extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(NotFoundException.class)
 	public ResponseEntity<?> handleNotFoundException(NotFoundException e) {
@@ -49,7 +42,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				.body(error);
 	}
 
-	@Override
+	/*@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(
 			MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
@@ -64,7 +57,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(error);
-	}
+	}*/
 
 
 }

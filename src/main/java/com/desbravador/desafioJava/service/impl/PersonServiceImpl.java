@@ -5,9 +5,9 @@ import com.desbravador.desafioJava.exceptionhandler.exception.ValidateException;
 import com.desbravador.desafioJava.model.Person;
 import com.desbravador.desafioJava.repository.PersonRepository;
 import com.desbravador.desafioJava.service.PersonService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;

@@ -6,7 +6,6 @@ import com.desbravador.desafioJava.model.dto.request.UpdateProjectRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -53,7 +52,7 @@ public class Project {
 
   public static Project of(CreateProjectRequest createRequest) {
     var project = builder().build();
-    BeanUtils.copyProperties(createRequest, project);
+    //BeanUtils.copyProperties(createRequest, project);
     project.setStatus(Optional.ofNullable(createRequest.getStatus()).map(Enum::name).orElse(null));
     project.setRisco(Optional.ofNullable(createRequest.getRisco()).map(Enum::name).orElse(null));
     project.setGerente(Person.builder().cpf(createRequest.getCpfGerente()).build());
@@ -62,7 +61,7 @@ public class Project {
 
   public static Project of(UpdateProjectRequest updateRequest) {
     var project = builder().build();
-    BeanUtils.copyProperties(updateRequest, project);
+    //BeanUtils.copyProperties(updateRequest, project);
     project.setStatus(Optional.ofNullable(updateRequest.getStatus()).map(Enum::name).orElse(null));
     project.setRisco(Optional.ofNullable(updateRequest.getRisco()).map(Enum::name).orElse(null));
     project.setGerente(Person.builder().cpf(updateRequest.getCpfGerente()).build());

@@ -7,9 +7,9 @@ import com.desbravador.desafioJava.repository.MemberRepository;
 import com.desbravador.desafioJava.service.MemberService;
 import com.desbravador.desafioJava.service.PersonService;
 import com.desbravador.desafioJava.service.ProjectService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
