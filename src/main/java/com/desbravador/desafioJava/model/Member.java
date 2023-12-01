@@ -22,12 +22,12 @@ public class Member {
 
   @NotNull
   @ManyToOne
-  @JoinColumn(name = "idProjeto")
+  @JoinColumn(name = "id_projeto")
   private Project project;
 
   @NotNull
   @ManyToOne
-  @JoinColumn(name = "idPessoa")
+  @JoinColumn(name = "id_pessoa")
   private Person person;
 
   public static Member of(MemberRequest request) {

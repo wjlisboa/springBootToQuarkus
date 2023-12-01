@@ -62,8 +62,7 @@ public class MemberServiceImpl implements MemberService {
               throw new ValidateException(String.format(MEMBER_ALREADY_EXISTING,
                       alreadyMember.getPerson().getCpf(),
                       alreadyMember.getProject().getNome()));
-            }
-    );
+            });
   }
 
 }

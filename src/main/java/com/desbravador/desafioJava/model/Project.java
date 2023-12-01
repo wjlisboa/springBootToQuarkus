@@ -1,8 +1,6 @@
 package com.desbravador.desafioJava.model;
 
 
-import com.desbravador.desafioJava.model.dto.request.CreateProjectRequest;
-import com.desbravador.desafioJava.model.dto.request.UpdateProjectRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -10,7 +8,6 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Data
 @Entity(name = "Projeto")
@@ -27,10 +24,13 @@ public class Project {
   @NotNull
   private String nome;
 
+  @Column(name = "data_inicio")
   private LocalDate dataInicio;
 
+  @Column(name = "data_previsao_fim")
   private LocalDate dataPrevisaoFim;
 
+  @Column(name = "data_fim")
   private LocalDate dataFim;
 
   private String descricao;
@@ -41,30 +41,13 @@ public class Project {
 
   private String risco;
 
+
   @NotNull
   @ManyToOne
-  @JoinColumn(name = "idGerente")
+  @JoinColumn(name = "id_Gerente")
   private Person gerente;
 
   @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
   private List<Member> membros;
 
-
-  public static Project of(CreateProjectRequest createRequest) {
-    var project = builder().build();
-    //BeanUtils.copyProperties(createRequest, project);
-    project.setStatus(Optional.ofNullable(createRequest.getStatus()).map(Enum::name).orElse(null));
-    project.setRisco(Optional.ofNullable(createRequest.getRisco()).map(Enum::name).orElse(null));
-    project.setGerente(Person.builder().cpf(createRequest.getCpfGerente()).build());
-    return project;
-  }
-
-  public static Project of(UpdateProjectRequest updateRequest) {
-    var project = builder().build();
-    //BeanUtils.copyProperties(updateRequest, project);
-    project.setStatus(Optional.ofNullable(updateRequest.getStatus()).map(Enum::name).orElse(null));
-    project.setRisco(Optional.ofNullable(updateRequest.getRisco()).map(Enum::name).orElse(null));
-    project.setGerente(Person.builder().cpf(updateRequest.getCpfGerente()).build());
-    return project;
-  }
 }

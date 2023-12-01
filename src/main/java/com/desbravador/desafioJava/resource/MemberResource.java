@@ -1,5 +1,6 @@
 package com.desbravador.desafioJava.resource;
 
+import com.desbravador.desafioJava.mapper.ProjectMapper;
 import com.desbravador.desafioJava.model.Member;
 import com.desbravador.desafioJava.model.dto.request.MemberRequest;
 import com.desbravador.desafioJava.model.dto.response.ProjectResponse;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 public class MemberResource {
 
     private final MemberService service;
+    private final ProjectMapper projectMapper;
 
     @Operation(summary = "Retornar Projetos filtrando pelo CPF")
     @APIResponses({
@@ -39,7 +41,10 @@ public class MemberResource {
             @APIResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping(value = "/findByCpf")
     public List<ProjectResponse> findMembersByCpf(@RequestParam String cpf) {
-        return service.findMembersByCpf(cpf).stream().map(ProjectResponse::of).collect(Collectors.toList());
+        return service.findMembersByCpf(cpf)
+                .stream()
+                .map(projectMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Operation(summary = "Associar uma pessoa a um determinado projeto")
@@ -52,7 +57,7 @@ public class MemberResource {
     @PostMapping("/associateMember")
     @ResponseStatus(code = HttpStatus.CREATED)
     public ProjectResponse associateMember(@RequestBody @Valid final MemberRequest request) {
-        return ProjectResponse.of(service.associateMember(Member.of(request)));
+        return projectMapper.toResponse(service.associateMember(Member.of(request)));
     }
 
     @Operation(summary = "Desassociar uma pessoa de um determinado projeto")
@@ -64,6 +69,6 @@ public class MemberResource {
             @APIResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @DeleteMapping("/disassociateMember")
     public ProjectResponse disassociateMember(@RequestBody @Valid final MemberRequest request) {
-        return ProjectResponse.of(service.disassociateMember(Member.of(request)));
+        return projectMapper.toResponse(service.disassociateMember(Member.of(request)));
     }
 }

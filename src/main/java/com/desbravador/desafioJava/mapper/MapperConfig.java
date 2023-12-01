@@ -1,10 +1,9 @@
 package com.desbravador.desafioJava.mapper;
 
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.MappingInheritanceStrategy;
+import org.mapstruct.*;
 
 @org.mapstruct.MapperConfig(
-        componentModel = "cdi",
+        componentModel = MappingConstants.ComponentModel.JAKARTA_CDI,
         mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_FROM_CONFIG,
         injectionStrategy = InjectionStrategy.CONSTRUCTOR
 )
