@@ -1,32 +1,19 @@
 package com.desbravador.desafioJava.config;
 
-import io.smallrye.openapi.api.models.OpenAPIImpl;
-import io.smallrye.openapi.api.models.info.ContactImpl;
-import io.smallrye.openapi.api.models.info.InfoImpl;
-import org.eclipse.microprofile.openapi.models.OpenAPI;
-import org.eclipse.microprofile.openapi.models.info.Contact;
-import org.eclipse.microprofile.openapi.models.info.Info;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import jakarta.ws.rs.core.Application;
+import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
+import org.eclipse.microprofile.openapi.annotations.info.Contact;
+import org.eclipse.microprofile.openapi.annotations.info.Info;
 
-@Configuration
-public class OpenAPIConfig {
-
-  @Bean
-  public OpenAPI myOpenAPI() {
-
-    Contact contact = new ContactImpl();
-    contact.setEmail("desafio@desbravador.com.br");
-    contact.setName("Desafio Java");
-    contact.setUrl("http://desbravador.com.br/");
-
-    Info info =
-        new InfoImpl()
-            .title("Desbravador - Desafio Java")
-            .version("1.0")
-            .contact(contact)
-            .description("Api para prover funcionalidades do desafio Java.");
-
-    return new OpenAPIImpl().info(info);
-  }
+@OpenAPIDefinition(
+        info = @Info(
+                title="SpringBoot To Quarkus",
+                version = "1.0.0",
+                description = "Api para prover funcionalidades do desafio Java.",
+                contact = @Contact(
+                        name = "Quarkus",
+                        url = "https://quarkus.io/",
+                        email = "desafio@springQuarkus.com"))
+)
+public class OpenAPIConfig extends Application {
 }
