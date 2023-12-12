@@ -1,15 +1,18 @@
 package com.desbravador.desafioJava.exceptionhandler;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Error {
 
 	private LocalDateTime dateTime;
 	private String message;
-	
 }

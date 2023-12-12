@@ -1,5 +1,8 @@
 package com.desbravador.desafioJava.resource;
 
+import com.desbravador.desafioJava.exceptionhandler.Error;
+import com.desbravador.desafioJava.exceptionhandler.exception.NotFoundException;
+import com.desbravador.desafioJava.exceptionhandler.exception.ValidateException;
 import com.desbravador.desafioJava.model.Member;
 import com.desbravador.desafioJava.model.Person;
 import com.desbravador.desafioJava.model.Project;
@@ -16,6 +19,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import static com.desbravador.desafioJava.util.Constants.PERSON_NOT_EMPLOYEE;
+import static com.desbravador.desafioJava.util.Constants.PROJECT_NOT_FOUND;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -31,8 +36,6 @@ class MemberResourceTest {
   private static final Long PERSON_ID = new Random().nextLong();
   private static final String PERSON_CPF = "01788975588";
   private static final String PERSON_NAME = UUID.randomUUID().toString();
-  private static final String NOT_EMPLOYEE = "não é funcionário";
-  private static final String MEMBER_EXISTING = "já é funcionário do projeto";
 
   @InjectMock MemberService service;
 
@@ -86,6 +89,55 @@ class MemberResourceTest {
     assertEquals(PROJECT_NAME, project.getNome());
     assertTrue(project.getFuncionarios().stream().anyMatch(personResponse -> PERSON_CPF.equals(personResponse.getCpf())));
     verify(service).associateMember(mockMember);
+  }
+
+
+  @Test
+  void should_not_associate_member_with_nonexistent_project() {
+    var errorMessage = String.format(PROJECT_NOT_FOUND, PROJECT_ID);
+    when(service.associateMember(any(Member.class)))
+            .thenThrow(new NotFoundException(errorMessage));
+
+    var error = given()
+                  .contentType(ContentType.JSON)
+                  .body(getMockRequest())
+                  .when()
+                  .post("/funcionarios/associateMember")
+                  .then()
+                  .log().all()
+                  .statusCode(HttpStatus.SC_NOT_FOUND)
+                  .extract()
+                  .body()
+                  .jsonPath()
+                  .getObject(".", Error.class);
+
+    assertNotNull(error);
+    assertEquals(errorMessage, error.getMessage());
+    verify(service).associateMember(any());
+  }
+
+
+  @Test
+  void should_not_associate_member_not_employee() {
+    var errorMessage = String.format(PERSON_NOT_EMPLOYEE, PERSON_CPF, PERSON_NAME);
+    when(service.associateMember(any(Member.class)))
+            .thenThrow(new ValidateException(errorMessage));
+
+    var error = given()
+            .contentType(ContentType.JSON)
+            .body(getMockRequest())
+            .when()
+            .post("/funcionarios/associateMember")
+            .then()
+            .statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY)
+            .extract()
+            .body()
+            .jsonPath()
+            .getObject(".", Error.class);
+
+    assertNotNull(error);
+    assertEquals(errorMessage, error.getMessage());
+    verify(service).associateMember(any());
   }
 
   @Test
