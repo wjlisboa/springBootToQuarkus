@@ -2,6 +2,7 @@ package com.desbravador.desafioJava.exceptionhandler;
 
 import com.desbravador.desafioJava.exceptionhandler.exception.NotFoundException;
 import com.desbravador.desafioJava.exceptionhandler.exception.ValidateException;
+import com.desbravador.desafioJava.util.Constants;
 import io.quarkus.logging.Log;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import jakarta.validation.ConstraintViolation;
@@ -33,7 +34,7 @@ public class ExceptionMapper implements jakarta.ws.rs.ext.ExceptionMapper<Throwa
 		} else {
 			Error error = Error.builder()
 					.dateTime(LocalDateTime.now())
-					.message("Erro interno do servidor")
+					.message(Constants.INTERNAL_ERROR_MESSAGE)
 					.build();
 
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
