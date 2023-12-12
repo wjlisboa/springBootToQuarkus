@@ -9,6 +9,7 @@ import com.desbravador.desafioJava.model.ProjectStatusEnum;
 import com.desbravador.desafioJava.repository.ProjectRepository;
 import com.desbravador.desafioJava.service.PersonService;
 import com.desbravador.desafioJava.service.ProjectService;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import static com.desbravador.desafioJava.util.Constants.*;
 
 @Service
 @RequiredArgsConstructor
+@ApplicationScoped
 public class ProjectServiceImpl implements ProjectService {
 
   private final ProjectRepository repository;

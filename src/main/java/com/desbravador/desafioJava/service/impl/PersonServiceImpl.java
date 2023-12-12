@@ -6,6 +6,7 @@ import com.desbravador.desafioJava.mapper.PersonMapper;
 import com.desbravador.desafioJava.model.Person;
 import com.desbravador.desafioJava.repository.PersonRepository;
 import com.desbravador.desafioJava.service.PersonService;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import static com.desbravador.desafioJava.util.Constants.*;
 
 @Service
 @RequiredArgsConstructor
+@ApplicationScoped
 public class PersonServiceImpl implements PersonService {
 
   private final PersonRepository repository;

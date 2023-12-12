@@ -1,4 +1,4 @@
-/*package com.desbravador.desafioJava.service;
+package com.desbravador.desafioJava.service;
 
 import com.desbravador.desafioJava.exceptionhandler.exception.ValidateException;
 import com.desbravador.desafioJava.model.Person;
@@ -7,11 +7,10 @@ import com.desbravador.desafioJava.model.ProjectRiskEnum;
 import com.desbravador.desafioJava.model.ProjectStatusEnum;
 import com.desbravador.desafioJava.repository.ProjectRepository;
 import com.desbravador.desafioJava.service.impl.ProjectServiceImpl;
+import io.quarkus.test.InjectMock;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -19,7 +18,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class ProjectServiceImplTest {
 
   private static final Long ID = new Random().nextLong();
@@ -32,11 +31,14 @@ class ProjectServiceImplTest {
   private static final String NOT_MANAGER = "não é gerente";
   private static final String CAN_NOT_DELETE = "não pode ser excluído";
 
-  @Mock private ProjectRepository repository;
+  @InjectMock
+  ProjectRepository repository;
 
-  @Mock private PersonService personService;
+  @InjectMock
+  PersonService personService;
 
-  @InjectMocks private ProjectServiceImpl service;
+  @Inject
+  ProjectServiceImpl service;
 
   @Test
   void should_get_projects() {
@@ -188,4 +190,3 @@ class ProjectServiceImplTest {
             .build();
   }
 }
-*/

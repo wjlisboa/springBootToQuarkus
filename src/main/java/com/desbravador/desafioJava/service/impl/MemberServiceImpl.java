@@ -7,6 +7,7 @@ import com.desbravador.desafioJava.repository.MemberRepository;
 import com.desbravador.desafioJava.service.MemberService;
 import com.desbravador.desafioJava.service.PersonService;
 import com.desbravador.desafioJava.service.ProjectService;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import static com.desbravador.desafioJava.util.Constants.*;
 
 @Service
 @RequiredArgsConstructor
+@ApplicationScoped
 public class MemberServiceImpl implements MemberService {
 
   private final PersonService personService;
