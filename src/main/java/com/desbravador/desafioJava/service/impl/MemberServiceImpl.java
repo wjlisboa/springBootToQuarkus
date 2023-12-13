@@ -7,9 +7,10 @@ import com.desbravador.desafioJava.repository.MemberRepository;
 import com.desbravador.desafioJava.service.MemberService;
 import com.desbravador.desafioJava.service.PersonService;
 import com.desbravador.desafioJava.service.ProjectService;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import static com.desbravador.desafioJava.util.Constants.*;
 
 @Service
 @RequiredArgsConstructor
+@ApplicationScoped
 public class MemberServiceImpl implements MemberService {
 
   private final PersonService personService;
@@ -62,8 +64,7 @@ public class MemberServiceImpl implements MemberService {
               throw new ValidateException(String.format(MEMBER_ALREADY_EXISTING,
                       alreadyMember.getPerson().getCpf(),
                       alreadyMember.getProject().getNome()));
-            }
-    );
+            });
   }
 
 }

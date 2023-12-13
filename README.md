@@ -1,4 +1,4 @@
-# Desbravador - DesafioJava
+# DesafioJava
 API Rest pra possibilitar:
 
 Consultar, Incluir, Alterar, Deletar **Projetos**;

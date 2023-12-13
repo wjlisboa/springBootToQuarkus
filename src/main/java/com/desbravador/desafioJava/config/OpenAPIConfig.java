@@ -1,29 +1,19 @@
 package com.desbravador.desafioJava.config;
 
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
-import io.swagger.v3.oas.models.info.Info;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import jakarta.ws.rs.core.Application;
+import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
+import org.eclipse.microprofile.openapi.annotations.info.Contact;
+import org.eclipse.microprofile.openapi.annotations.info.Info;
 
-@Configuration
-public class OpenAPIConfig {
-
-  @Bean
-  public OpenAPI myOpenAPI() {
-
-    Contact contact = new Contact();
-    contact.setEmail("desafio@desbravador.com.br");
-    contact.setName("Desafio Java");
-    contact.setUrl("http://desbravador.com.br/");
-
-    Info info =
-        new Info()
-            .title("Desbravador - Desafio Java")
-            .version("1.0")
-            .contact(contact)
-            .description("Api para prover funcionalidades do desafio Java.");
-
-    return new OpenAPI().info(info);
-  }
+@OpenAPIDefinition(
+        info = @Info(
+                title="SpringBoot To Quarkus",
+                version = "1.0.0",
+                description = "Api para prover funcionalidades do desafio Java.",
+                contact = @Contact(
+                        name = "Quarkus",
+                        url = "https://quarkus.io/",
+                        email = "desafio@springQuarkus.com"))
+)
+public class OpenAPIConfig extends Application {
 }

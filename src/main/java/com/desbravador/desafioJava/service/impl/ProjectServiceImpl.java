@@ -2,15 +2,17 @@ package com.desbravador.desafioJava.service.impl;
 
 import com.desbravador.desafioJava.exceptionhandler.exception.NotFoundException;
 import com.desbravador.desafioJava.exceptionhandler.exception.ValidateException;
+import com.desbravador.desafioJava.mapper.ProjectMapper;
 import com.desbravador.desafioJava.model.Person;
 import com.desbravador.desafioJava.model.Project;
 import com.desbravador.desafioJava.model.ProjectStatusEnum;
 import com.desbravador.desafioJava.repository.ProjectRepository;
 import com.desbravador.desafioJava.service.PersonService;
 import com.desbravador.desafioJava.service.ProjectService;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,11 +21,14 @@ import static com.desbravador.desafioJava.util.Constants.*;
 
 @Service
 @RequiredArgsConstructor
+@ApplicationScoped
 public class ProjectServiceImpl implements ProjectService {
 
   private final ProjectRepository repository;
 
   private final PersonService personService;
+
+  private final ProjectMapper mapper;
 
   @Override
   public List<Project> getProjects() {
@@ -76,14 +81,7 @@ public class ProjectServiceImpl implements ProjectService {
 
   private void fillExistingProject(Project project, Project existingProject) {
     Optional.ofNullable(project.getGerente().getCpf()).ifPresent(cpf -> existingProject.setGerente(getGerente(cpf)));
-    Optional.ofNullable(project.getDataInicio()).ifPresent(existingProject::setDataInicio);
-    Optional.ofNullable(project.getDataPrevisaoFim()).ifPresent(existingProject::setDataPrevisaoFim);
-    Optional.ofNullable(project.getDataFim()).ifPresent(existingProject::setDataFim);
-    Optional.ofNullable(project.getNome()).ifPresent(existingProject::setNome);
-    Optional.ofNullable(project.getDescricao()).ifPresent(existingProject::setDescricao);
-    Optional.ofNullable(project.getStatus()).ifPresent(existingProject::setStatus);
-    Optional.ofNullable(project.getOrcamento()).ifPresent(existingProject::setOrcamento);
-    Optional.ofNullable(project.getRisco()).ifPresent(existingProject::setRisco);
+    mapper.fillProjectFromProject(project, existingProject);
   }
 
   private void validateProjectStatus(Project project) {

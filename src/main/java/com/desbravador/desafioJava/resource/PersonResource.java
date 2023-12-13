@@ -1,92 +1,122 @@
 package com.desbravador.desafioJava.resource;
 
+import com.desbravador.desafioJava.mapper.PersonMapper;
 import com.desbravador.desafioJava.model.dto.request.CreatePersonRequest;
 import com.desbravador.desafioJava.model.dto.request.UpdatePersonRequest;
 import com.desbravador.desafioJava.model.dto.response.PersonResponse;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.desbravador.desafioJava.service.PersonService;
+import io.quarkus.hibernate.validator.runtime.jaxrs.JaxrsEndPointValidated;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Tag(name = "Pessoa", description = "Crud de pessoas")
-@Validated
-public interface PersonResource {
+@JaxrsEndPointValidated
+@RestController
+@RequestMapping(value = "/pessoas", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
+public class PersonResource {
 
+    private final PersonService service;
+    private final PersonMapper mapper;
 
     @Operation(summary = "Retornar todas Pessoas")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {
+    @APIResponses({
+            @APIResponse(responseCode = "200", content = {
                     @Content(schema = @Schema(implementation = PersonResponse.class), mediaType = "application/json") }),
-            @ApiResponse(responseCode = "404", description = "Não existem pessoas", content = {
+            @APIResponse(responseCode = "404", description = "Não existem pessoas", content = {
                     @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+            @APIResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping
-    List<PersonResponse> findAllPersons();
+    public List<PersonResponse> findAllPersons() {
+        return service.getPersons()
+                .stream()
+                .map(mapper::toResponse)
+                .collect(Collectors.toList());
+    }
 
     @Operation(summary = "Retornar Pessoa filtrando pelo Id")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {
+    @APIResponses({
+            @APIResponse(responseCode = "200", content = {
                     @Content(schema = @Schema(implementation = PersonResponse.class), mediaType = "application/json") }),
-            @ApiResponse(responseCode = "404", description = "Pessoa não existente", content = {
+            @APIResponse(responseCode = "404", description = "Pessoa não existente", content = {
                     @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+            @APIResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping(value = "/{id}")
-    PersonResponse findPersonById(@PathVariable final Long id);
+    public PersonResponse findPersonById(@PathVariable final Long id) {
+        return mapper.toResponse(service.getPersonById(id));
+    }
 
     @Operation(summary = "Retornar Pessoa filtrando pelo CPF")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {
+    @APIResponses({
+            @APIResponse(responseCode = "200", content = {
                     @Content(schema = @Schema(implementation = PersonResponse.class), mediaType = "application/json") }),
-            @ApiResponse(responseCode = "404", description = "Pessoa não existente", content = {
+            @APIResponse(responseCode = "404", description = "Pessoa não existente", content = {
                     @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+            @APIResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping(value = "/findByCpf")
-    PersonResponse findPersonByCpf(@RequestParam final String cpf);
+    public PersonResponse findPersonByCpf(@RequestParam final String cpf) {
+        return mapper.toResponse(service.getPersonByCpf(cpf));
+    }
 
     @Operation(summary = "Retornar pessoas filtrando pelo Nome")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {
+    @APIResponses({
+            @APIResponse(responseCode = "200", content = {
                     @Content(schema = @Schema(implementation = PersonResponse.class), mediaType = "application/json") }),
-            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+            @APIResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping("/findByName")
-    List<PersonResponse> findPersonByName(@RequestParam final String name);
+    public List<PersonResponse> findPersonByName(@RequestParam final String name) {
+        return service.getPersonByName(name)
+                .stream()
+                .map(mapper::toResponse)
+                .collect(Collectors.toList());
+    }
 
     @Operation(summary = "Criar uma pessoa")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Pessoa Criada", content = {
+    @APIResponses({
+            @APIResponse(responseCode = "201", description = "Pessoa Criada", content = {
                     @Content(schema = @Schema(implementation = PersonResponse.class), mediaType = "application/json") }),
-            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+            @APIResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @PostMapping()
     @ResponseStatus(code = HttpStatus.CREATED)
-    PersonResponse createPerson(@RequestBody @Valid final CreatePersonRequest request);
+    public PersonResponse createPerson(@RequestBody @Valid final CreatePersonRequest request) {
+        return mapper.toResponse(service.createPerson(mapper.toPerson(request)));
+    }
 
     @Operation(summary = "Atualizar uma pessoa")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Pessoa Atualizada", content = {
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "Pessoa Atualizada", content = {
                     @Content(schema = @Schema(implementation = PersonResponse.class), mediaType = "application/json") }),
-            @ApiResponse(responseCode = "404", description = "Pessoa não existente", content = {
+            @APIResponse(responseCode = "404", description = "Pessoa não existente", content = {
                     @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+            @APIResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @PutMapping
-    PersonResponse updatePerson(@RequestBody @Valid final UpdatePersonRequest request);
+    public PersonResponse updatePerson(@RequestBody @Valid final UpdatePersonRequest request) {
+        return mapper.toResponse(service.updatePerson(mapper.toPerson(request)));
+    }
 
     @Operation(summary = "Excluir uma pessoa")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Pessoa Excluída", content = {
+    @APIResponses({
+            @APIResponse(responseCode = "204", description = "Pessoa Excluída", content = {
                     @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "404", description = "Pessoa não existente", content = {
+            @APIResponse(responseCode = "404", description = "Pessoa não existente", content = {
                     @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+            @APIResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    void deletePerson(@PathVariable final Long id);
+    public void deletePerson(@PathVariable final Long id){
+        service.deletePerson(id);
+    }
 }

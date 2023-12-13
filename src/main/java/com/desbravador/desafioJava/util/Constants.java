@@ -19,4 +19,6 @@ public class Constants {
 
     public static final String MEMBER_ALREADY_EXISTING = "Pessoa '%s' já é funcionário do projeto '%s'";
     public static final String MEMBER_NOT_FOUND = "Pessoa e/ou projeto não encontrado";
+
+    public static final String INTERNAL_ERROR_MESSAGE =  "Erro interno do servidor";
 }

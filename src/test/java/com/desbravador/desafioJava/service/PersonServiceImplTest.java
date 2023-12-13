@@ -4,18 +4,17 @@ import com.desbravador.desafioJava.exceptionhandler.exception.ValidateException;
 import com.desbravador.desafioJava.model.Person;
 import com.desbravador.desafioJava.repository.PersonRepository;
 import com.desbravador.desafioJava.service.impl.PersonServiceImpl;
+import io.quarkus.test.InjectMock;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class PersonServiceImplTest {
 
   private static final Long ID = new Random().nextLong();
@@ -23,9 +22,11 @@ class PersonServiceImplTest {
   private static final String CPF = UUID.randomUUID().toString();
   private static final String ALREADY_EXISTING = "já cadastrada";
 
-  @Mock private PersonRepository repository;
+  @InjectMock
+  PersonRepository repository;
 
-  @InjectMocks private PersonServiceImpl service;
+  @Inject
+  PersonServiceImpl service;
 
   @Test
   void should_get_persons() {

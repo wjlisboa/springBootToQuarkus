@@ -7,18 +7,17 @@ import com.desbravador.desafioJava.model.Project;
 import com.desbravador.desafioJava.repository.MemberRepository;
 import com.desbravador.desafioJava.service.impl.MemberServiceImpl;
 import com.desbravador.desafioJava.util.Constants;
+import io.quarkus.test.InjectMock;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class MemberServiceImplTest {
 
   private static final Long ID = new Random().nextLong();
@@ -30,11 +29,16 @@ class MemberServiceImplTest {
   private static final String NOT_EMPLOYEE = "não é funcionário";
   private static final String MEMBER_EXISTING = "já é funcionário do projeto";
 
-  @Mock private MemberRepository repository;
-  @Mock private ProjectService projectService;
-  @Mock private PersonService personService;
+  @InjectMock
+  MemberRepository repository;
+  @InjectMock
+  ProjectService projectService;
+  @InjectMock
+  PersonService personService;
 
-  @InjectMocks private MemberServiceImpl service;
+
+  @Inject
+  MemberServiceImpl service;
 
   @Test
   void should_find_projects_by_cpf_of_member() {
